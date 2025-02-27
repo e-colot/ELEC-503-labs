@@ -212,3 +212,86 @@ A frequency band of 10 Hz with 30 equidistantly spaced frequencies means that a 
 
 Because it was built with the perfect reconstruction condition, the period of the multisine is equal to the period of a sine at the frequency resolution, which is $1/3 Hz$ so the period is $3$ seconds.
 
+\section{Influence of the phase of the multisine}
+
+\begin{Task}{Task 1.5.1. Crest Factor}
+    Construct a multisine, with N = 500, with the first K = 60 bins excited, and with the following phases:
+    \begin{itemize}
+        \item random phase: chosen randomly in $[0, 2\pi]$ (uniform distribution)
+        \item Schroeder phase: $\varphi_k = \frac{m(m+1)\pi}{K}$
+        \item Linear phase: $\varphi_m = m\pi$
+    \end{itemize}
+    Make time and frequency domain plots (in samples and bins), and compute the Crest Factors. Describe, qualitatively, the relationship between the time domain plot and the crest factor. What is the advantage of a low/high crest factor?
+\end{Task}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{part1/task1_5_1.png}
+    \caption{Crest Factor}
+\end{figure}
+
+Based on the figure, it is quite clear that a larger Crest Factor corresponds to a signal that has peaks of larger amplitude ($\max |x_3| \approx 6 \times \max |x_2|$). This is easily understandable as the Crest Factor is defined as the ratio between the peak value and the RMS value of the signal. The advantage of a low Crest Factor is that the signal has no big peaks, which could damage an unprotected electronic system receiving it.
+
+\section{Random noise signals}
+
+\begin{Task}{Task 1.6.1. White Gaussian random noise}
+    Generate a normally distributed (Gaussian), random, white noise sequence of N = 1000 samples, by using the Matlab function randn. Make time and frequency domain plots (axes in samples and bins). Observe that all the bins are excited, with random amplitudes and phases.
+\end{Task}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{part1/task1_6_1.png}
+    \caption{White Gaussian random noise}
+\end{figure}
+
+\begin{Task}{Task 1.6.2. Filtered random noise}
+    Generate a filtered random noise sequence with N = 1000, sampling frequency 100 Hz, from a Gaussian white noise sequence (use randn). Do this by using the function cheby1 to create a lowpass digital Chebyshev filter of order 5, ripple 2 dB, and such that the passband edge lies at 5 Hz. Filter the sequence by using the function filter. Make time and frequency domain plots (axes in seconds and Hz), and check that the excited frequency band is as expected. What do you observe in the stop-band of the filter? Is it equal to 0? Explain.
+\end{Task}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{part1/task1_6_2.png}
+    \caption{Filtered random noise}
+\end{figure}
+
+The excited frequency band is indeed reduced to 5 Hz as expected. In the stop-band of the filter, the amplitude is not equal to 0. This is due to the fact that the filter is not an ideal filter, and thus does not completely remove the frequencies above 5 Hz. The amplitude after $10 Hz$ is already reduced by $30 dB$ and the increase for higher bins is due to the symmetry of the DFT proved in task 1.1.3.
+
+\begin{Task}{Task 1.6.3. Periodic band-limited random noise}
+    Generate a Gaussian random noise sequence (use randn), with N = 1000 and sampling frequency 100 Hz. Compute the DFT, and set the DFT at all frequencies beyond 5 Hz to zero:
+    \begin{align*}
+        \tilde{X}(k) = 0 && \text{for } \omega_k \geq 10\pi \text{ rad/s}\\
+        \tilde{X}(k) = X(k) && \text{otherwise}
+    \end{align*}
+    and use the expression
+    \begin{equation*}
+        x(n) = 2 \Re \left\{\text{iDFT}(\tilde{X}(k))\right\}
+    \end{equation*}
+    to obtain the time sequence. Make time and frequency domain plots (axes in seconds and Hz).\\
+    If you repeat this time domain sequence x(n) (by putting multiple copies of the sequence after each other), and computing the DFT of the result, no leakage should occur. Check this, and explain why this is the case.
+\end{Task}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{part1/task1_6_3.png}
+    \caption{Periodic band-limited random noise}
+\end{figure}
+
+There is no leakage when repeating the \textbf{idft} of the filtered noise as the condition on perfect reconstruction is fulfilled. As the signal that is repeated is built from the frequential domain, it will have an integer number of periods in the time domain, and thus when replicated no leakage will occur as it will still have an integer number of periods inside the window of the \textbf{dft}.
+
+\section{Set the Root-Mean-Square of the signal}
+
+\begin{Task}{Task 1.7.1. RMS value}
+    Set the RMS value of your favourite signal from the previous tasks to $RMS_{des} = 3$, as follows:
+    \begin{equation*}
+        x_{des}(n) = x(n)\frac{RMS_{des}}{RMS(x)}
+    \end{equation*}
+    Prove that thr RMS of $x_{des}(n)$ is indeed $RMS_{des}$.
+\end{Task}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{part1/task1_7_1.png}
+    \caption{RMS value}
+\end{figure}
+
+Note that the title of the plot contains the RMS value of the modified signal and it indeed reaches $3$.
