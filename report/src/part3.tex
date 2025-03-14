@@ -3,3 +3,76 @@
 \chapter{Lab 3}
 
 
+\begin{Task}{Question 3.1. Length data records}
+    Note that this algorithm works faster when the length of the data records N is a power of 2. Do you know why?
+\end{Task}
+
+To implement numerically the FFT, the DFT algorithm is used. It works by dividing the input signal into two parts, each of which is transformed separately, and then the results are combined and this is done recursively. It means that a number of samples that is a power of 2 will be perfectly divided at each step, leading to a faster computation.
+
+\begin{Task}{Question 3.2. Trigger signal}
+    What is the purpose of a trigger signal? A number of processing methods were discussed in the theory to improve the SNR of the FRF by averaging of measurements. Which methods require a trigger signal to operate properly? Explain what happens if the trigger is absent while needed.
+\end{Task}
+
+For the averaging in the time domain and the averaging in the DFT spectra, the input and output signals need to be identical:
+\begin{align*}
+    H_{\text{time}}(j\omega_k) = \frac{\textbf{DFT}\left(\frac{1}{M}\sum_{i=1}^{M}y_i(n)\right)}{\textbf{DFT}\left(\frac{1}{M}\sum_{i=1}^{M}u_i(n)\right)}\\
+    H_{\text{DFT}}(j\omega_k) = \frac{\frac{1}{M}\sum_{i=1}^{M}\textbf{DFT}\left(y_i(n)\right)}{\frac{1}{M}\sum_{i=1}^{M}\textbf{DFT}\left(u_i(n)\right)}
+\end{align*}
+
+For the measurements to be identical between two repetitions (except for the noise of course), they should always start at the same point in the period of the excitation and this is the purpose of the trigger signal.
+
+\begin{Task}{Question 3.3. Frequency domain multisine}
+    In your report, show the Matlab code you used to construct the multisine signal (with random or Schroeder phase) in the frequency domain. Make sure that the code is sufficiently commented to improve its readability.
+\end{Task}
+
+\begin{lstlisting}[language=Matlab]
+fs = 16000; % Sampling frequency
+excFreq = [4 1000]; % Excited frequencies in Hz
+rmsVal = 0.5; % RMS value
+N = 4000; % Number of samples
+
+freqAxis = (0:N-1)*fs/N; % Frequency axis in Hz
+
+K = (excFreq(2) - excFreq(1))*N/fs; % Number of excited frequencies
+
+signalFreq = zeros(1, N);
+
+for i = 1:length(freqAxis)
+    if (freqAxis(i) >= excFreq(1) && freqAxis(i) <= excFreq(2))
+        schroederPhase = (i*(i+1)*pi)/(K);
+        signalFreq(i) = exp(1j*schroederPhase);
+    end
+end
+
+signalTime = N*real(ifft(signalFreq)); % Generate the signal
+signalTime = signalTime*rmsVal/rms(signalTime); % Normalize the signal
+\end{lstlisting}
+
+
+\begin{Task}{Question 3.4. Averaging the measurements}
+    Which averaging techniques are applicable to which excitation signals? Explain.
+\end{Task}
+
+\huge{TODO}
+\normalsize
+
+\begin{Task}{Question 3.5. Plots}
+    Provide relevant plots of the estimated FRF, obtained with the different methods, with the different exciation signals and with a different number of averaged records.
+\end{Task}
+
+\huge{TODO}
+\normalsize
+
+\begin{Task}{Question 3.6. Impact of repetition number}
+    Determine the effect of the number of averaged records on the variability of the averaged result. Compare the standard deviation.
+\end{Task}
+
+\huge{TODO}
+\normalsize
+
+\begin{Task}{Question 3.7. Discussion}
+    Discuss the differences and explain according to you, which will deliver the best result. Discuss the pros and cons of each excitation signal.
+\end{Task}
+
+\huge{TODO}
+\normalsize
