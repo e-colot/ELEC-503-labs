@@ -26,26 +26,22 @@ For the measurements to be identical between two repetitions (except for the noi
 \end{Task}
 
 \begin{lstlisting}[language=Matlab]
-fs = 16000; % Sampling frequency
-excFreq = [4 1000]; % Excited frequencies in Hz
-rmsVal = 0.5; % RMS value
-N = 4000; % Number of samples
-
-freqAxis = (0:N-1)*fs/N; % Frequency axis in Hz
-
-K = (excFreq(2) - excFreq(1))*N/fs; % Number of excited frequencies
-
-signalFreq = zeros(1, N);
-
-for i = 1:length(freqAxis)
-    if (freqAxis(i) >= excFreq(1) && freqAxis(i) <= excFreq(2))
-        schroederPhase = (i*(i+1)*pi)/(K);
-        signalFreq(i) = exp(1j*schroederPhase);
-    end
-end
-
-signalTime = N*real(ifft(signalFreq)); % Generate the signal
-signalTime = signalTime*rmsVal/rms(signalTime); % Normalize the signal
+    fs = 16000; % Sampling frequency
+    excFreq = [4 1000]; % Excited frequencies in Hz
+    rmsVal = 0.5; % RMS value
+    N = 4000; % Number of samples
+    
+    m = excFreq(1)*N/fs : excFreq(2)*N/fs; % Excited frequencies in bins
+    K = length(m); % Number of excited frequencies
+    
+    shroedPhase = m.*(m+1) * pi / K;
+    signalFreq = zeros(1, N);
+    
+    signalFreq(m + 1) = exp(1j*shroedPhase);
+    % m + 1 because the index starts from 1 in MATLAB
+    
+    signalTime = 2*N*real(ifft(signalFreq)); % Generate the signal
+    signalTime = signalTime*rmsVal/rms(signalTime); % Normalize the signal
 \end{lstlisting}
 
 

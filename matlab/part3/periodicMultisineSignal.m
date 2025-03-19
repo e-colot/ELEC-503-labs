@@ -6,27 +6,21 @@ rmsVal = 0.5; % RMS value
 N = 4000; % Number of samples
 
 freqAxis = (0:N-1)*fs/N; % Frequency axis in Hz
-K = (excFreq(2) - excFreq(1))*N/fs; % Number of excited frequencies
-m = 1:K;
-shroadPhase = m.*(m+1) * pi / K;
-excitedBins = zeros(length(freqAxis));
-excitedBins(excFreq(1)*fs/N:excFreq(2)*fs/N) = exp(1j * shroadPhase);
 
-% signalFreq = zeros(1, N);
-% 
-% for i = 1:length(freqAxis)
-%     if (freqAxis(i) >= excFreq(1) && freqAxis(i) <= excFreq(2))
-%         schroederPhase = (i*(i+1)*pi)/(K);
-%         signalFreq(i) = exp(1j*schroederPhase);
-%     end
-% end
+m = excFreq(1)*N/fs : excFreq(2)*N/fs; % Excited frequencies in bins
+K = length(m); % Number of excited frequencies
+
+shroedPhase = m.*(m+1) * pi / K;
+signalFreq = zeros(1, N);
+
+signalFreq(m + 1) = exp(1j*shroedPhase);
+% m + 1 because the index starts from 1 in MATLAB
 
 
-signalTime = N*real(ifft(excitedBins)); % Generate the signal
-%signalTime = N*real(ifft(signalFreq)); % Generate the signal
+signalTime = 2*N*real(ifft(signalFreq)); % Generate the signal
 signalTime = signalTime*rmsVal/rms(signalTime); % Normalize the signal
 
-%save('periodicMultisineSignal.mat', 'signalTime');
+save('periodicMultisineSignal.mat', 'signalTime');
 
 figure;
 subplot(3, 1, 1);
