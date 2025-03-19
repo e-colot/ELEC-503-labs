@@ -6,22 +6,15 @@ aperiodicFile = 'ResAperiodic.mat';
 [uPeriodic, yPeriodic] = ReadData(periodicFile, 4000, 40);
 [uAperiodic, yAperiodic] = ReadData(aperiodicFile, 40*4000, 1);
 
-if (size(uPeriodic, 1) == 1)
-    uPeriodic = uPeriodic(1, 8*4000+1:end);
-    yPeriodic = yPeriodic(1, 8*4000+1:end);
-    uAperiodic = uAperiodic(1, 8*4000+1:end);
-    yAperiodic = yAperiodic(1, 8*4000+1:end);
-else
-    uPeriodic = uPeriodic(8*4000+1:end);
-    yPeriodic = yPeriodic(8*4000+1:end);
-    uAperiodic = uAperiodic(8*4000+1:end);
-    yAperiodic = yAperiodic(8*4000+1:end);
-end
+uAperiodic = reshape(uAperiodic, 4000, 40);
+yAperiodic = reshape(yAperiodic, 4000, 40);
 
-uPeriodic = reshape(uPeriodic, 4000, 32);
-yPeriodic = reshape(yPeriodic, 4000, 32);
-uAperiodic = reshape(uAperiodic, 4000, 32);
-yAperiodic = reshape(yAperiodic, 4000, 32);
+uAperiodic = uAperiodic(:, 9:end);
+yAperiodic = yAperiodic(:, 9:end);
+
+uPeriodic = uPeriodic(:, 9:end);
+yPeriodic = yPeriodic(:, 9:end);
+
 
 fs = 16000; % Sampling frequency
 N = 4000; % Number of samples
@@ -36,28 +29,28 @@ yAperiodicMean = mean(yAperiodic, 2);
 periodicFRF1 = fft(yPeriodicMean)./fft(uPeriodicMean);
 aperiodicFRF1 = fft(yAperiodicMean)./fft(uAperiodicMean);
 
-figure;
-title('FRF - time average');
+figure('Name', 'FRF - time average');
 subplot(2, 2, 1);
-plot(freqAxis, abs(periodicFRF1));
+plot(freqAxis, db(periodicFRF1));
 title('Periodic FRF - magnitude');
 xlabel('Frequency (Hz)');
-ylabel('Magnitude');
+ylabel('Magnitude'); xlim([0 1000]); xlim([0 1000]);
 subplot(2, 2, 2);
 plot(freqAxis, angle(periodicFRF1));
 title('Periodic FRF - phase');
 xlabel('Frequency (Hz)');
 ylabel('Phase');
 subplot(2, 2, 3);
-plot(freqAxis, abs(aperiodicFRF1));
+plot(freqAxis, db(aperiodicFRF1));
 title('Aperiodic FRF - magnitude');
 xlabel('Frequency (Hz)');
-ylabel('Magnitude');
+ylabel('Magnitude'); xlim([0 1000]);
 subplot(2, 2, 4);
 plot(freqAxis, angle(aperiodicFRF1));
 title('Aperiodic FRF - phase');
 xlabel('Frequency (Hz)');
 ylabel('Phase');
+
 
 %% Averaging the DFT spectra
 
@@ -74,23 +67,22 @@ yAperiodicMeanDFT = mean(yAperiodicDFT, 2);
 periodicFRF2 = yPeriodicMeanDFT./uPeriodicMeanDFT;
 aperiodicFRF2 = yAperiodicMeanDFT./uAperiodicMeanDFT;
 
-figure;
-title('FRF - DFT average');
+figure('Name', 'FRF - DFT average');
 subplot(2, 2, 1);
-plot(freqAxis, abs(periodicFRF2));
+plot(freqAxis, db(periodicFRF2));
 title('Periodic FRF - magnitude');
 xlabel('Frequency (Hz)');
-ylabel('Magnitude');
+ylabel('Magnitude'); xlim([0 1000]);
 subplot(2, 2, 2);
 plot(freqAxis, angle(periodicFRF2));
 title('Periodic FRF - phase');
 xlabel('Frequency (Hz)');
 ylabel('Phase');
 subplot(2, 2, 3);
-plot(freqAxis, abs(aperiodicFRF2));
+plot(freqAxis, db(aperiodicFRF2));
 title('Aperiodic FRF - magnitude');
 xlabel('Frequency (Hz)');
-ylabel('Magnitude');
+ylabel('Magnitude'); xlim([0 1000]);
 subplot(2, 2, 4);
 plot(freqAxis, angle(aperiodicFRF2));
 title('Aperiodic FRF - phase');
@@ -104,23 +96,22 @@ periodicFRF3 = mean(periodicFRFDFT, 2);
 aperiodicFRFDFT = yAperiodicDFT./uAperiodicDFT;
 aperiodicFRF3 = mean(aperiodicFRFDFT, 2);
 
-figure;
-title('FRF - DFT average');
+figure('Name', 'FRF average');
 subplot(2, 2, 1);
-plot(freqAxis, abs(periodicFRF3));
+plot(freqAxis, db(periodicFRF3));
 title('Periodic FRF - magnitude');
 xlabel('Frequency (Hz)');
-ylabel('Magnitude');
+ylabel('Magnitude'); xlim([0 1000]);
 subplot(2, 2, 2);
 plot(freqAxis, angle(periodicFRF3));
 title('Periodic FRF - phase');
 xlabel('Frequency (Hz)');
 ylabel('Phase');
 subplot(2, 2, 3);
-plot(freqAxis, abs(aperiodicFRF3));
+plot(freqAxis, db(aperiodicFRF3));
 title('Aperiodic FRF - magnitude');
 xlabel('Frequency (Hz)');
-ylabel('Magnitude');
+ylabel('Magnitude'); xlim([0 1000]);
 subplot(2, 2, 4);
 plot(freqAxis, angle(aperiodicFRF3));
 title('Aperiodic FRF - phase');
@@ -137,23 +128,22 @@ aperiodicInputPower = mean(abs(uAperiodicDFT).^2, 2);
 periodicFRF4 = periodicCrossPower./periodicInputPower;
 aperiodicFRF4 = aperiodicCrossPower./aperiodicInputPower;
 
-figure;
-title('FRF - input auto-power average');
+figure('Name', 'FRF - input auto-power average');
 subplot(2, 2, 1);
-plot(freqAxis, abs(periodicFRF4));
+plot(freqAxis, db(periodicFRF4));
 title('Periodic FRF - magnitude');
 xlabel('Frequency (Hz)');
-ylabel('Magnitude');
+ylabel('Magnitude'); xlim([0 1000]);
 subplot(2, 2, 2);
 plot(freqAxis, angle(periodicFRF4));
 title('Periodic FRF - phase');
 xlabel('Frequency (Hz)');
 ylabel('Phase');
 subplot(2, 2, 3);
-plot(freqAxis, abs(aperiodicFRF4));
+plot(freqAxis, db(aperiodicFRF4));
 title('Aperiodic FRF - magnitude');
 xlabel('Frequency (Hz)');
-ylabel('Magnitude');
+ylabel('Magnitude'); xlim([0 1000]);
 subplot(2, 2, 4);
 plot(freqAxis, angle(aperiodicFRF4));
 title('Aperiodic FRF - phase');
@@ -170,23 +160,22 @@ aperiodicOutputPower = mean(abs(yAperiodicDFT).^2, 2);
 periodicFRF5 = periodicOutputPower./periodicCrossPowerBis;
 aperiodicFRF5 = aperiodicOutputPower./aperiodicCrossPowerBis;
 
-figure;
-title('FRF - output auto-power average');
+figure('Name', 'FRF - output auto-power average');
 subplot(2, 2, 1);
-plot(freqAxis, abs(periodicFRF5));
+plot(freqAxis, db(periodicFRF5));
 title('Periodic FRF - magnitude');
 xlabel('Frequency (Hz)');
-ylabel('Magnitude');
+ylabel('Magnitude'); xlim([0 1000]);
 subplot(2, 2, 2);
 plot(freqAxis, angle(periodicFRF5));
 title('Periodic FRF - phase');
 xlabel('Frequency (Hz)');
 ylabel('Phase');
 subplot(2, 2, 3);
-plot(freqAxis, abs(aperiodicFRF5));
+plot(freqAxis, db(aperiodicFRF5));
 title('Aperiodic FRF - magnitude');
 xlabel('Frequency (Hz)');
-ylabel('Magnitude');
+ylabel('Magnitude'); xlim([0 1000]);
 subplot(2, 2, 4);
 plot(freqAxis, angle(aperiodicFRF5));
 title('Aperiodic FRF - phase');
