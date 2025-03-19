@@ -4,7 +4,7 @@
 
 
 \begin{Task}{Question 3.1. Length data records}
-    Note that this algorithm works faster when the length of the data records N is a power of 2. Do you know why?
+    The DFT algorithm works faster when the length of the data records N is a power of 2. Do you know why?
 \end{Task}
 
 To implement numerically the FFT, the DFT algorithm is used. It works by dividing the input signal into two parts, each of which is transformed separately, and then the results are combined and this is done recursively. It means that a number of samples that is a power of 2 will be perfectly divided at each step, leading to a faster computation.
