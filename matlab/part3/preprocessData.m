@@ -34,12 +34,12 @@ subplot(2, 2, 1);
 plot(freqAxis, db(periodicFRF1));
 title('Periodic FRF - magnitude');
 xlabel('Frequency (Hz)');
-ylabel('Magnitude'); xlim([0 1000]); xlim([0 1000]);
+ylabel('Magnitude'); xlim([0 1000]); 
 subplot(2, 2, 2);
 plot(freqAxis, angle(periodicFRF1));
 title('Periodic FRF - phase');
 xlabel('Frequency (Hz)');
-ylabel('Phase');
+ylabel('Phase'); xlim([0 1000]);
 subplot(2, 2, 3);
 plot(freqAxis, db(aperiodicFRF1));
 title('Aperiodic FRF - magnitude');
@@ -49,7 +49,7 @@ subplot(2, 2, 4);
 plot(freqAxis, angle(aperiodicFRF1));
 title('Aperiodic FRF - phase');
 xlabel('Frequency (Hz)');
-ylabel('Phase');
+ylabel('Phase'); xlim([0 1000]);
 
 
 %% Averaging the DFT spectra
@@ -77,7 +77,7 @@ subplot(2, 2, 2);
 plot(freqAxis, angle(periodicFRF2));
 title('Periodic FRF - phase');
 xlabel('Frequency (Hz)');
-ylabel('Phase');
+ylabel('Phase'); xlim([0 1000]);
 subplot(2, 2, 3);
 plot(freqAxis, db(aperiodicFRF2));
 title('Aperiodic FRF - magnitude');
@@ -87,7 +87,7 @@ subplot(2, 2, 4);
 plot(freqAxis, angle(aperiodicFRF2));
 title('Aperiodic FRF - phase');
 xlabel('Frequency (Hz)');
-ylabel('Phase');
+ylabel('Phase'); xlim([0 1000]);
 
 %% Averaging the FRF
 
@@ -106,7 +106,7 @@ subplot(2, 2, 2);
 plot(freqAxis, angle(periodicFRF3));
 title('Periodic FRF - phase');
 xlabel('Frequency (Hz)');
-ylabel('Phase');
+ylabel('Phase'); xlim([0 1000]);
 subplot(2, 2, 3);
 plot(freqAxis, db(aperiodicFRF3));
 title('Aperiodic FRF - magnitude');
@@ -116,7 +116,7 @@ subplot(2, 2, 4);
 plot(freqAxis, angle(aperiodicFRF3));
 title('Aperiodic FRF - phase');
 xlabel('Frequency (Hz)');
-ylabel('Phase');
+ylabel('Phase'); xlim([0 1000]);
 
 %% Averaging the auto-power of the input signal and the cross-power
 
@@ -138,7 +138,7 @@ subplot(2, 2, 2);
 plot(freqAxis, angle(periodicFRF4));
 title('Periodic FRF - phase');
 xlabel('Frequency (Hz)');
-ylabel('Phase');
+ylabel('Phase'); xlim([0 1000]);
 subplot(2, 2, 3);
 plot(freqAxis, db(aperiodicFRF4));
 title('Aperiodic FRF - magnitude');
@@ -148,7 +148,7 @@ subplot(2, 2, 4);
 plot(freqAxis, angle(aperiodicFRF4));
 title('Aperiodic FRF - phase');
 xlabel('Frequency (Hz)');
-ylabel('Phase');
+ylabel('Phase'); xlim([0 1000]);
 
 %% Averaging the auto-power of the output signal and the cross-power
 
@@ -170,7 +170,7 @@ subplot(2, 2, 2);
 plot(freqAxis, angle(periodicFRF5));
 title('Periodic FRF - phase');
 xlabel('Frequency (Hz)');
-ylabel('Phase');
+ylabel('Phase'); xlim([0 1000]);
 subplot(2, 2, 3);
 plot(freqAxis, db(aperiodicFRF5));
 title('Aperiodic FRF - magnitude');
@@ -180,7 +180,7 @@ subplot(2, 2, 4);
 plot(freqAxis, angle(aperiodicFRF5));
 title('Aperiodic FRF - phase');
 xlabel('Frequency (Hz)');
-ylabel('Phase');
+ylabel('Phase'); xlim([0 1000]);
 
 
 disp('Done!');
