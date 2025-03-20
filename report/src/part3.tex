@@ -109,12 +109,25 @@ Because the transient has been removed by discarding the first 8 periods, the es
     Determine the effect of the number of averaged records on the variability of the averaged result. Compare the standard deviation.
 \end{Task}
 
-\huge{TODO}
-\normalsize
+By computing the different std's for different number of averaged records, we see that there is no major difference. This is very surprising and it proves even more that we might have kept a noiseless response. What should have happened is that the std should have decreased as the number of averaged records increased.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{part3/std.png}
+    \caption{Standard deviation of the estimated FRF for different number of averaged records using the time averaging method and the aperiodic excitation signal}
+\end{figure}
 
 \begin{Task}{Question 3.7. Discussion}
     Discuss the differences and explain according to you, which will deliver the best result. Discuss the pros and cons of each excitation signal.
 \end{Task}
 
-\huge{TODO}
-\normalsize
+This question has already been partially answered in Question 3.4. The first 3 methods should be used only with known excitations as they do not support close to zero excitations. The last two methods can be used with any excitation signal and are unbiased only when the noise is circular complex. The main advantage of using a random excitation (so one of the power averaging methods) is that they give an FRF of the whole spectrum whereas using a deterministic excitation gives result only for the excited frequencies. It can be seen by comparing the whole measured FRF with the input power method:\\
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{part3/input_power_whole_freq.png}
+    \caption{Estimated FRF by averaging the auto-power of the input signal}
+\end{figure}
+
+The FRF is indeed unusable for the periodic excitation signal above $1000$ Hz, the upper limit of the excited frequencies.\\
+
