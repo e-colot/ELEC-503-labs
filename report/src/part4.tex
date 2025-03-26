@@ -30,6 +30,35 @@ using matlab, each excited frequency has been plotted on figure \ref{fig:distort
     Design an excitation sinewave with a frequency of $100$ Hz and an amplitude of $1$ V. Plot the input signal and the output signal of the DUT in the frequency domain. What do you observe? Give a list of all possible solutions to get rid of this behaviour. Design experiments to show that the proposed solutions do indeed work.
 \end{Task}
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{part4/leakage.png}
+    \caption{Initial sine wave DFT}
+    \label{fig:leakage}
+\end{figure}
+
+The DFT of the sinusoidal input signal is clearly not a Dirac pulse as the chosen frequency is not at an integer bin index. \\
+
+The size of a bin being the inverse of the signal duration $N/f_s$, we want
+\begin{equation*}
+    f_{\text{signal}} = k \cdot \frac{f_s}{N} \quad \text{with} \quad k \in \mathbb{N}
+\end{equation*}
+
+This is visible as there is leakage in the DFT plot. There are 3 ways of solving this:
+\begin{itemize}
+    \item Changing the number of samples $\rightarrow N = $
+    \item Changing the sampling frequency $\rightarrow f_s = $
+    \item Changing the sine frequency $\rightarrow f_{\text{signal}} = $
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{part4/corrected.png}
+    \caption{Corrected sine wave DFT}
+    \label{fig:corrected}
+\end{figure}
+
+
 \begin{Task}{Question 4.3.}
     Change the excitation frequency to a frequency in the neighborhood of 100 Hz in order to solve the problem in the previous step. Use 10 different amplitudes that are spaced logarithmicaly from 100 mV to 1.1 V [logspace command in MATLAB]). Plot the DFT of the output for each amplitude. What are the frequencies at which you expect distortion to appear? Are they all present in reality? Explain.
 \end{Task}
