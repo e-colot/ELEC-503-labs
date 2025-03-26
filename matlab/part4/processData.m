@@ -37,57 +37,18 @@ uA = uA(:, end);
 yA = yA(:, end);
 
 % plot the DFT of the last period of the output
+
+
 figure('units','normalized','outerposition',[0 0 1 1]); % Full screen
-subplot(3, 4, 1);
-plot(db(fft(y1(:, end))));
-title('output 1');
-xlabel('Frequency (Hz)');
-ylabel('Amplitude');
-subplot(3, 4, 2);
-plot(db(fft(y2(:, end))));
-title('output 2');
-xlabel('Frequency (Hz)');
-ylabel('Amplitude');
-subplot(3, 4, 3);
-plot(db(fft(y3(:, end))));
-title('output 3');
-xlabel('Frequency (Hz)');
-ylabel('Amplitude');
-subplot(3, 4, 4);
-plot(db(fft(y4(:, end))));
-title('output 4');
-xlabel('Frequency (Hz)');
-ylabel('Amplitude');
-subplot(3, 4, 5);
-plot(db(fft(y5(:, end))));
-title('output 5');
-xlabel('Frequency (Hz)');
-ylabel('Amplitude');
-subplot(3, 4, 6);
-plot(db(fft(y6(:, end))));
-title('output 6');
-xlabel('Frequency (Hz)');
-ylabel('Amplitude');
-subplot(3, 4, 7);
-plot(db(fft(y7(:, end))));
-title('output 7');
-xlabel('Frequency (Hz)');
-ylabel('Amplitude');
-subplot(3, 4, 8);
-plot(db(fft(y8(:, end))));
-title('output 8');
-xlabel('Frequency (Hz)');
-ylabel('Amplitude');
-subplot(3, 4, 9);
-plot(db(fft(y9(:, end))));
-title('output 9');
-xlabel('Frequency (Hz)');
-ylabel('Amplitude');
-subplot(3, 4, 10);
-plot(db(fft(yA(:, end))));
-title('output A');
-xlabel('Frequency (Hz)');
-ylabel('Amplitude');
+outputs = {y1, y2, y3, y4, y5, y6, y7, y8, y9, yA};
+for i = 1:length(outputs)
+    subplot(3, 4, i);
+    tmp = fft(outputs{i}(:, end));
+    plot(db(tmp(1:500)));
+    title(['output ', num2str(i)]);
+    xlabel('Frequency (Hz)');
+    ylabel('Amplitude');
+end
 
 %% Question 4.4. about power
 
@@ -130,6 +91,6 @@ title('Output power as a function of the input power');
 coeffs = polyfit(db(powerIn(1:2)), db(powerOut(1:2)), 1);
 fittedLine = polyval(coeffs, db(powerIn));
 plot(db(powerIn), fittedLine, 'k');
-legend('Data', 'Fitted Line');
+legend('Data', 'Data points', 'Linear behaviour');
 
 

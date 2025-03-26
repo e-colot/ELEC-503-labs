@@ -4,6 +4,7 @@ fs = 10e3;
 N = 4096;
 
 f = 100; % sine frequency in Hz
+
 f_alt = 105; % alternative sine frequency in Hz
 A = 1;   % sine amplitude
 A_alt = logspace(-1, log10(1.1), 10); % alternative sine amplitudes
