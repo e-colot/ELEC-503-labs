@@ -84,7 +84,7 @@ for n = n_p
     end
     
     % Compute the variance of the estimation error
-    V_LS(n) = 1/(N_e * 10^(-SNR/10)) * norm(y_e - H*theta_est).^2;
+    V_LS(n) = 1/(N_e * y_0ePower * 10^(-SNR/10)) * norm(y_e - H*theta_est).^2;
 
     %% AIC
     V_AIC(n) = V_LS(n) * (1 + 2*n/N_e);
@@ -93,7 +93,7 @@ for n = n_p
     H_val = toeplitz(fliplr(u_0vPadded));
     H_val = H_val(1:N_e, end-n+1:end);
 
-    V_VAL(n) = 1/(N_v * 10^(-SNR/10)) * norm(y_v - H_val*theta_est).^2;
+    V_VAL(n) = 1/(N_v * y_0vPower * 10^(-SNR/10)) * norm(y_v - H_val*theta_est).^2;
 
 end
 
@@ -110,11 +110,13 @@ plot(n_p(idxAIC), minAIC, 'rx', 'MarkerSize', 10, 'LineWidth', 2);
 disp('Optimal n according to AIC: ');
 disp(n_p(idxAIC));
 
-legend('LS cost', 'AIC cost', 'Validation dataset based', 'Optimal n according to AIC');
+[minVAL, idxVAL] = min(V_VAL(1:5*n_h));
+plot(n_p(idxVAL), minVAL, 'mx', 'MarkerSize', 10, 'LineWidth', 2);
+disp('Optimal n according to validation: ');
+disp(n_p(idxVAL));
+
+legend('LS cost', 'AIC cost', 'Validation dataset based', 'Optimal n according to AIC', 'Optimal n according to validation');
 title('LS cost function for varying number of parameters n');
-
-%% select optimal model order using AIC and validation
-
 
 
 
