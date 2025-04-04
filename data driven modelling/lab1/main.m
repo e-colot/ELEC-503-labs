@@ -25,6 +25,9 @@ imp = imp(1:n_h);
 impTime = impTime(1:n_h);
 
 plot(impTime, imp);
+title('Impulse response of the system');
+xlabel('time (s)');
+ylabel('amplitude');
 
 
 %% Excitation and output signals

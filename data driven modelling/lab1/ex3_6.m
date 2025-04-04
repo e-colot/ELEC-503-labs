@@ -62,7 +62,7 @@ for j = 1:100
         V_LS(n, j) = 1/(N_e * y_0ePower * 10^(-SNR/10)) * norm(y_e - H*theta_est).^2;
 
         %% AIC
-        V_AIC(n, j) = V_LS(n) * (1 + 2*n/N_e);
+        V_AIC(n, j) = V_LS(n, j) * (1 + 2*n/N_e);
         %% Validation
         u_0vPadded = [zeros(n-1, 1); u_0v].';
         H_val = toeplitz(fliplr(u_0vPadded));
@@ -78,15 +78,41 @@ mean_V_AIC = mean(V_AIC, 2);
 mean_V_VAL = mean(V_VAL, 2);
 
 figure;
-plot(n_p, mean_V_LS, 'r', 'LineWidth', 2);
+plot(n_p, mean_V_LS, 'LineWidth', 2);
 hold on;
-plot(n_p, mean_V_AIC, 'b', 'LineWidth', 2);
+plot(n_p, mean_V_AIC, 'LineWidth', 2);
 hold on;
-plot(n_p, mean_V_VAL, 'g', 'LineWidth', 2);
+plot(n_p, mean_V_VAL, 'LineWidth', 2);
 hold on;
 legend('V_{LS}', 'V_{AIC}', 'V_{VAL}');
 title('Variance of the estimation error for varying n');
 xlabel('Number of parameters n');
+
+% Find optimal n for each criterion across 100 repetitions
+n_opti_AIC = zeros(1, 100);
+n_opti_VAL = zeros(1, 100);
+
+for j = 1:100
+    [~, n_opti_AIC(j)] = min(V_AIC(:, j));
+    [~, n_opti_VAL(j)] = min(V_VAL(:, j));
+end
+
+% Plot histograms
+figure;
+
+% Subplot for AIC
+subplot(2, 1, 1);
+histogram(n_opti_AIC, 'FaceColor', 'b', 'EdgeColor', 'k');
+title('Histogram of n_{opti} (AIC)');
+xlabel('Optimal number of parameters n');
+ylabel('Frequency');
+
+% Subplot for Validation
+subplot(2, 1, 2);
+histogram(n_opti_VAL, 'FaceColor', 'r', 'EdgeColor', 'k');
+title('Histogram of n_{opti} (Validation)');
+xlabel('Optimal number of parameters n');
+ylabel('Frequency');
 
 
 
