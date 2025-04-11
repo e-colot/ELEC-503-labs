@@ -55,7 +55,7 @@ The curve of the cost function using the estimation dataset is strictly decreasi
 \begin{equation}
     V_{AIC} = V_{LS} \left(1+\frac{2n_p}{N_e}\right)
 \end{equation}
-The other criterion is built using a validation dataset generated exactly like the estimation dataset except their values are independent. This way, the noise that will be followed by an overfitting model will be detected. The curves are shown in figure \ref{fig:costFunction}. The optimal number of parameters are the one that minimizes the cost functions and it can be seen that the AIC and the validation dataset criterion give close values of $n_{p, \text{opt}}$.
+The other criterion is built using a validation dataset generated exactly like the estimation dataset. It means the values are independent from the dataset used for the parameters generation. This way, the noise that will be followed by an overfitting model will be detected. The curves are shown in figure \ref{fig:costFunction}. The optimal number of parameters are the one that minimizes the cost functions and it can be seen that the AIC and the validation dataset criterion give close values of $n_{p, \text{opt}}$.
 \begin{figure}
     \centering
     \includegraphics[width=0.5\textwidth]{pic/cost.png}
