@@ -1,7 +1,13 @@
 clear; close all; clc;
 
 repNumber = 10;
+fs = 10e3;
 N = 4096;
+f = 100.1; %Frequency signal
+
+freqaxis = [0:N-1]*fs/N;
+
+A_alt = logspace(-1, log10(1.1), 10); % alternative sine amplitudes
 
 % Load the data
 [u1 y1] = ReadData('rep_2_1.mat', N, repNumber);
@@ -44,11 +50,19 @@ outputs = {y1, y2, y3, y4, y5, y6, y7, y8, y9, yA};
 for i = 1:length(outputs)
     subplot(3, 4, i);
     tmp = fft(outputs{i}(:, end));
-    plot(db(tmp(1:500)));
-    title(['output ', num2str(i)]);
+    plot(freqaxis(1:500),db(tmp(1:500)));
+    title(['Signal amplitude : ', num2str(A_alt(1,i))]);
     xlabel('Frequency (Hz)');
     ylabel('Amplitude');
 end
+
+figure('units','normalized','outerposition',[0 0 1 1]); % Full screen
+outputs = {y1, y2, y3, y4, y5, y6, y7, y8, y9, yA};
+tmp = fft(outputs{10}(:, end));
+plot(freqaxis(1:500),db(tmp(1:500)));
+title(['Signal amplitude : ', num2str(A_alt(1,10))]);
+xlabel('Frequency (Hz)');
+ylabel('Amplitude');
 
 %% Question 4.4. about power
 
@@ -81,7 +95,9 @@ powerOut(10) = mean(abs(yA).^2);
 % plot the output power as a function of the input power
 
 figure;
-plot(db(powerIn), db(powerOut));
+coeffs = polyfit(db(powerIn(1:10)), db(powerOut(1:10)), 6);
+fittedLine_non_linear = polyval(coeffs, db(powerIn));
+plot(db(powerIn), fittedLine_non_linear);
 hold on;
 plot(db(powerIn), db(powerOut), 'o');
 xlabel('Input power');
@@ -91,6 +107,14 @@ title('Output power as a function of the input power');
 coeffs = polyfit(db(powerIn(1:2)), db(powerOut(1:2)), 1);
 fittedLine = polyval(coeffs, db(powerIn));
 plot(db(powerIn), fittedLine, 'k');
-legend('Data', 'Data points', 'Linear behaviour');
+hold on
+plot(db(powerIn),fittedLine+1,'r');
+legend('Data', 'Data points', 'Linear behaviour','1dB line');
+
+%% Amplitude check - 1dB
+
+powerIn_1dB = -4.366;
+A_1db = sqrt(2*10^(powerIn_1dB/20));
+disp(['Signal amplitude for 1dB expansion :',num2str(A_1db)]);
 
 
