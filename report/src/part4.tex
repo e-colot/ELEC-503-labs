@@ -63,7 +63,51 @@ This is visible as there is leakage in the DFT plot. There are 3 ways of solving
     Change the excitation frequency to a frequency in the neighborhood of 100 Hz in order to solve the problem in the previous step. Use 10 different amplitudes that are spaced logarithmicaly from 100 mV to 1.1 V (logspace command in MATLAB]. Plot the DFT of the output for each amplitude. What are the frequencies at which you expect distortion to appear? Are they all present in reality? Explain.
 \end{Task}
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1.1\textwidth]{part4/Task_4_3_Harmonics.png}
+    \caption{Non-linear system response : Harmonics}
+    \label{fig:Harmonics}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{part4/Task_4_3_Harmonics_freq_2.png}
+    \caption{Non-linear system response : Harmonics frequency details}
+    \label{fig:Harmonics frequencies value}
+\end{figure}
+
+By increasing the amplitude, we can observe the peaks of the harmonics rising (at frequencies which are multiple of the excited frequency which is as expected).
+These peaks rise as the behaviour of the output signal deviates from a linear evolution
+to a "non-linear" behaviour.  It can be easily seen by computing the output/input power graph done at the point 4.4.  It should be mentionned that even at low power,
+ once the output signal deviates from a linear behaviour, the second and the third harmonics are the most visible as they have the highest contributions 
+ (respectively one half and one quarter of the amplitude of the original signal frequency).
+
 \begin{Task}{Question 4.4.}
     Plot the measurements from the previous question on an input power – output power plot. Do you see compression or expansion? From this plot, estimate the 1 dB compression or expansion point. Generate a single sine wave with the corresponding input amplitude to see how accurate your estimate is.
 \end{Task}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{part4/Task_4_4_Power_expansion.png}
+    \caption{Non-linear system response : Output power non linearity}
+    \label{fig:Output_power}
+\end{figure}
+
+The plot of the output/input power can be seen in the graph above.  To compute the amplitude at which the output signal shows a expansion of 1dB, the formula shown in
+the picture \ref{fig:1dB_Amplitude} should be used.  The result of the formula can be seen in the matlab file "ProcessData".
+In this case, the amplitude resulting from the formula is 1.0999.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{part4/Task_4_4_1dB_Amplitude.png}
+    \caption{Non-linear system response : Amplitude for 1dB expansion}
+    \label{fig:1dB_Amplitude}
+\end{figure}
+
+ATTENTION : it should be mentionned that the point 4.3 and 4.4 are incorrect as the signal frequency has not been set according the result of the point 4.2 where a 
+signal frequency of 100.1 Hz should have been computed.  Instead, due to incorrect encoding, a signal with a frequency of 104 Hz has been computed which is incorrect
+as it does not fit the measurement window and therefore lead us to power leakage.
+
+
 
