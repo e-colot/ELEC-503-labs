@@ -80,7 +80,7 @@ ylabel('Loss');
 
 % ------------- testing loop -------------
 clear Z1 A1 Z2 A2;
-% forward pass
+% forward pass, test data
 m = size(xTesting,1);
 Z1 = xTesting * W1 + repmat(b1, m, 1);
 A1 = 1 ./ (1 + exp(-Z1));
@@ -90,6 +90,16 @@ A2 = exp(Z2) ./ sum(exp(Z2), 2);
 
 [~, estimatedResult] = max(A2, [], 2);
 [~, trueResult] = max(yTesting, [], 2);
+
+% forward pass, training data
+m = size(x,1);
+Z1 = x * W1 + repmat(b1, m, 1);
+A1 = 1 ./ (1 + exp(-Z1));
+Z2 = A1 * W2 + repmat(b2, m, 1);
+A2 = exp(Z2) ./ sum(exp(Z2), 2);
+
+[~, estimatedResultTraining] = max(A2, [], 2);
+[~, trueResultTraining] = max(yTraining, [], 2);
 
 figure;
 plot(trueResult, 'ro', 'MarkerSize', 10, 'LineWidth', 2);
@@ -105,4 +115,108 @@ title('True vs Estimated result');
 axis([0 size(xTesting, 1) 0 4]);
 grid on;
 
+TR = cell(size(trueResult, 1), 1);
+for i = 1:size(trueResult, 1)
+    if trueResult(i) == 1
+        TR{i} = 'setosa';
+    elseif trueResult(i) == 2
+        TR{i} = 'versicolor';
+    elseif trueResult(i) == 3
+        TR{i} = 'virginica';
+    end
+end
+ER = cell(size(trueResult, 1), 1);
+for i = 1:size(estimatedResult, 1)
+    if estimatedResult(i) == 1
+        ER{i} = 'setosa';
+    elseif estimatedResult(i) == 2
+        ER{i} = 'versicolor';
+    elseif estimatedResult(i) == 3
+        ER{i} = 'virginica';
+    end
+end
+
+TRT = cell(size(trueResultTraining, 1), 1);
+for i = 1:size(trueResultTraining, 1)
+    if trueResultTraining(i) == 1
+        TRT{i} = 'setosa';
+    elseif trueResultTraining(i) == 2
+        TRT{i} = 'versicolor';
+    elseif trueResultTraining(i) == 3
+        TRT{i} = 'virginica';
+    end
+end
+ERT = cell(size(estimatedResultTraining, 1), 1);
+for i = 1:size(estimatedResultTraining, 1)
+    if estimatedResultTraining(i) == 1
+        ERT{i} = 'setosa';
+    elseif estimatedResultTraining(i) == 2
+        ERT{i} = 'versicolor';
+    elseif estimatedResultTraining(i) == 3
+        ERT{i} = 'virginica';
+    end
+end
+
+% confusion matrix
+figure;
+subplot(1,2,1);
+confusionchart(TR, ER);
+title('Confusion matrix of test data');
+subplot(1,2,2);
+confusionchart(TRT, ERT);
+title('Confusion matrix of training data');
+
+% decision boundaries
+maxFeatures = max(meas);
+minFeatures = min(meas);
+
+numberOfPlots = sum(1:length(maxFeatures)-1);
+subplotRows = ceil(sqrt(numberOfPlots));
+subplotCols = ceil(numberOfPlots / subplotRows);
+subplotCnt = 1;
+numberOfPoints = 100;
+
+figure;
+colormap(jet(3)); % Set colormap for consistent coloring across subplots
+for i = 1:length(maxFeatures)
+    for j = i+1:length(maxFeatures)
+        
+        % create a grid of points
+        subplot(subplotRows, subplotCols, subplotCnt);
+        subplotCnt = subplotCnt + 1;
+
+        iFeature = linspace(minFeatures(i), maxFeatures(i), numberOfPoints);
+        jFeature = linspace(minFeatures(j), maxFeatures(j), numberOfPoints);
+
+        data = zeros(numberOfPoints^2, size(meas, 2));
+        iFeature = repmat(iFeature', numberOfPoints, 1);
+        jFeature = repmat(jFeature, numberOfPoints, 1);
+        jFeature = reshape(jFeature, numberOfPoints^2, 1);
+
+        data(:, i) = iFeature;
+        data(:, j) = jFeature;
+        
+        % forward pass
+        m = size(data,1);
+        Z1 = data * W1 + repmat(b1, m, 1);
+        A1 = 1 ./ (1 + exp(-Z1));
+
+        Z2 = A1 * W2 + repmat(b2, m, 1);
+        A2 = exp(Z2) ./ sum(exp(Z2), 2);
+
+        % plot decision boundaries
+        [~, estimatedResult] = max(A2, [], 2);
+        scatter(data(:, i), data(:, j), 10, estimatedResult, 'filled');
+        hold on;
+        xlabel(['Feature ' num2str(i)]);
+        ylabel(['Feature ' num2str(j)]);
+
+    end
+end
+sgtitle('Decision boundaries'); % Add a shared title for all subplots
+
+% Add a unique legend for all subplots
+legendLabels = {'setosa', 'versicolor', 'virginica'};
+colormap(jet(3)); % Ensure the colormap matches the number of classes
+colorbar('Ticks', [1/3, 2/3, 1], 'TickLabels', legendLabels, 'Location', 'eastoutside', 'Position', [0.92, 0.1, 0.02, 0.8]);
 

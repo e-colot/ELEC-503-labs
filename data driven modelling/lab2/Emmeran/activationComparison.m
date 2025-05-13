@@ -80,7 +80,7 @@ function [Loss, errorRate] = train(x, xTesting, yTraining, yTesting, seed, activ
 
     % ------------- testing loop -------------
     clear Z1 A1 Z2 A2;
-    % forward pass
+    % forward pass on training data
     m = size(xTesting,1);
     Z1 = xTesting * W1 + repmat(b1, m, 1);
     A1 = activationFunction(Z1);
@@ -91,8 +91,23 @@ function [Loss, errorRate] = train(x, xTesting, yTraining, yTesting, seed, activ
     [~, estimatedResult] = max(A2, [], 2);
     [~, trueResult] = max(yTesting, [], 2);
 
+    errors = sum(estimatedResult ~= trueResult);
+
+    % forward pass on training data
+    m = size(x,1);
+    Z1 = x * W1 + repmat(b1, m, 1);
+    A1 = activationFunction(Z1);
+
+    Z2 = A1 * W2 + repmat(b2, m, 1);
+    A2 = exp(Z2) ./ sum(exp(Z2), 2);
+
+    [~, estimatedResult] = max(A2, [], 2);
+    [~, trueResult] = max(yTraining, [], 2);
+
+    errors = errors + sum(estimatedResult ~= trueResult);
+
     % error rate
-    errorRate = sum(estimatedResult ~= trueResult) / size(xTesting, 1);
+    errorRate = errors / size(xTesting, 1);
 end
 
 function A = sigmoid(Z)
@@ -151,8 +166,8 @@ if run == 1
         % load data
         [x, xTesting, yTraining, yTesting] = loadData(percentageVect(i));
 
-        % looping for 100 times to average the error as a single test gives a varying result
-        loopSize = 100;
+        % looping to average the error as a single test gives a varying result
+        loopSize = 1000;
         errorSigmoid = zeros(loopSize, 1);
         errorReLU = zeros(loopSize, 1);
         for j = 1:loopSize
@@ -175,7 +190,6 @@ end
 figure;
 
 % Subplot 1: Error rates for Sigmoid and ReLU
-subplot(2, 1, 1);
 plot(percentageVect, avgErrorSigmoid, 'LineWidth', 2);
 hold on;
 plot(percentageVect, avgErrorReLU, 'LineWidth', 2);
@@ -183,13 +197,3 @@ xlabel('Percentage of training data');
 ylabel('Error rate');
 legend('Sigmoid', 'ReLU');
 title('Impact of the percentage of training data on error');
-
-% Subplot 2: Difference between error rates
-subplot(2, 1, 2);
-plot(percentageVect, avgErrorReLU - avgErrorSigmoid, 'LineWidth', 2);
-xlabel('Percentage of training data');
-ylabel('Error rate difference (ReLU - Sigmoid)');
-hold on;
-yline(0, 'r--', 'LineWidth', 1);
-hold off;
-title('Difference in error rates between ReLU and Sigmoid');
