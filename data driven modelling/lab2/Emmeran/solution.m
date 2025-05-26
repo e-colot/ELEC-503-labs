@@ -218,5 +218,7 @@ sgtitle('Decision boundaries'); % Add a shared title for all subplots
 % Add a unique legend for all subplots
 legendLabels = {'setosa', 'versicolor', 'virginica'};
 colormap(jet(3)); % Ensure the colormap matches the number of classes
-colorbar('Ticks', [1/3, 2/3, 1], 'TickLabels', legendLabels, 'Location', 'eastoutside', 'Position', [0.92, 0.1, 0.02, 0.8]);
+% get min and max values for colorbar
+caxis([0, 6]); % Set color axis limits to match the number of classes
+colorbar('Ticks', [1, 3, 5], 'TickLabels', legendLabels, 'Location', 'eastoutside', 'Position', [0.92, 0.1, 0.02, 0.8]);
 
